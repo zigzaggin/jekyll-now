@@ -32,40 +32,40 @@ bound to an event rail and notified at a designated time with appropriate argume
 
 For example, a callback takes some form like:
 
-```
-	var some_long_operation = function(callback) {
-		//some long operation
-		$.ajax({
-			success: function(data) {
-				callback(data.property);
-			}
-		});
-	}
-
-	some_long_operation(function(someArg) {
-		console.log(someArg)
+```javascript
+var some_long_operation = function(callback) {
+	//some long operation
+	$.ajax({
+		success: function(data) {
+			callback(data.property);
+		}
 	});
+}
+
+some_long_operation(function(someArg) {
+	console.log(someArg)
+});
 ```
 
 And an event rail looks more akin to:
 
-```
-	var target = $(this); //some object to house the rail, could be a dom object, most likely a javascript object
-	
-	target.on("operation.finished", function(e, someArg) {
-		console.log(someArg);
+```javascript
+var target = $(this); //some object to house the rail, could be a dom object, most likely a javascript object
+
+target.on("operation.finished", function(e, someArg) {
+	console.log(someArg);
+});
+
+var some_long_operation = function() {
+	//some long operation
+	$.ajax({
+		success: function(data) {
+			target.trigger("operation.finished", [data.property]);
+		}
 	});
-	
-	var some_long_operation = function() {
-		//some long operation
-		$.ajax({
-			success: function(data) {
-				target.trigger("operation.finished", [data.property]);
-			}
-		});
-	}
-	
-	some_long_operation();
+}
+
+some_long_operation();
 ```
 
 Now, on the surface, I don't really believe either of these is directly superior in all circumstances. 
